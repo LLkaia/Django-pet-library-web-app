@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<ul class="book-list">
+    <li>
+        <h2>{{ book.name }}</h2>
+        <p>{{ book.description|linebreaks }}</p>
+        <p>Available: {{ book.count }}</p>
+        {% if book.authors %}<p>Authors: {% for author in book.authors.all %}{{ author.name }} {{ author.last_name }} {{ author.patronymic }} | {% endfor %}</p>{% endif%}
+        <a href="{% url 'create-book' book.id %}" class="container-filter-button__button">Edit</a>
+    </li>
+</ul>
+{% endblock content %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="order">
+
+    <p><strong>Order ID:</strong> {{ order.id }}</p>
+    <p><strong>User:</strong> {{ order.user.first_name }}</p>
+    <p><strong>Book:</strong> {{ order.book.name }}</p>
+    <p><strong>Created At:</strong> {{ order.created_at }}</p>
+
+    {% if order.end_at %}
+        <p><strong>End At:</strong> {{ order.end_at|date:"M. d, Y, g:i a" }}</p>
+    {% else %}
+        <p><strong>End Date:</strong> Not specified</p>
+    {% endif %}
+
+    <p><strong>Planned End At:</strong> {{ order.plated_end_at|date:"M. d, Y, g:i a" }}</p>
+
+    {% if user.role == 1 and not order.is_closed %}
+        <form action="{% url 'close_order' order.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="create">Close Order</button>
+        </form>
+    {% endif %}
+
+    {% if order.is_closed %}
+        <p><strong>Status:</strong> Closed</p>
+    {% endif %}
+
+    <a href="{% url 'orders' %}" class="create">Back to All Orders</a>
+        </div>
+{% endblock %}

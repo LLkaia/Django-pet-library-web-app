@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-filter-button">
+    <form method="post" class="filter-form-container">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Filter</button>
+    </form>
+    {% if user.role == 1 %}<a href="{% url 'create-book' %}" class="container-filter-button__button">Create</a>{% endif %}
+</div>
+<ul class="book-list">
+    {% for book in books%}
+    {% if book.count %}
+    <li>
+        <h2>{{ book.name }}</h2>
+        <p>{{ book.description|linebreaks|truncatewords:4 }}</p>
+        <p><a href="{% url 'concrete-book' book.id %}">Details</a></p>
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>
+{% endblock content %}

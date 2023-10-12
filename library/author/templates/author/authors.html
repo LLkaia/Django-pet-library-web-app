@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="order">
+    <a href="{% url 'create_author' %}" class="create">Create Author</a>
+
+    <ul class="user-list">
+        {% for author in authors %}
+            <li>
+                {{ author.name }} {{ author.surname }} {{ author.patronymic }}
+                {% if not author.books.exists %}
+                    <a href="{% url 'delete_author' author.id %}" class="btn btn-danger">Delete</a>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>No authors available.</li>
+        {% endfor %}
+    </ul>
+    </div>
+{% endblock %}

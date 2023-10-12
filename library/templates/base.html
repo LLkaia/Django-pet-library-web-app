@@ -1,0 +1,41 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link type="text/css" href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <title>{{ title }}</title>
+</head>
+<body>
+<header class="container">
+    <a href="{% url 'home' %}" class="logo">Library</a>
+    <ul class="nav__list">
+        {% if user.is_authenticated %}
+        <li class="nav__item"><a href="{% url 'logout' %}" class="nav__link">Log out</a></li>
+        {% else %}
+        <li class="nav__item"><a href="{% url 'login' %}" class="nav__link">Log in</a></li>
+        <li class="nav__item"><a href="{% url 'register' %}" class="nav__link">Sign up</a></li>
+        {% endif %}
+    </ul>
+</header>
+<div class="container">
+    <ul class="nav__list menu">
+        <li class="nav__item"><a href="{% url 'home' %}" class="nav__link">Books</a></li>
+        {% if user.is_authenticated %}
+        {% if user.role == 0 %}
+        <li class="nav__item"><a href="{% url 'orders' %}" class="nav__link">Orders</a></li>
+        {% else %}
+        <li class="nav__item"><a href="{% url 'orders' %}" class="nav__link">Orders</a></li>
+        <li class="nav__item"><a href="{% url 'users' %}" class="nav__link">Users</a></li>
+        <li class="nav__item"><a href="{% url 'authors' %}" class="nav__link">Authors</a></li>
+        {% endif %}
+        {% endif %}
+    </ul>
+</div>
+<h1 class="title">{{ title }}</h1>
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
