@@ -1,13 +1,12 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseForbidden
 from authentication.views import is_admin
-from author.models import Author
 from django.shortcuts import render, redirect, get_object_or_404
 from library.forms import AuthorCreationForm
-
 from rest_framework import viewsets
 from .models import Author
 from .serializers import AuthorSerializer
+
 
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
