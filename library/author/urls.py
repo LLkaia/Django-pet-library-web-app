@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.all_authors, name='authors'),
-    path('create-author/', views.create_author, name='create_author'),
-    path('delete-author/<int:pk>/', views.delete_author, name='delete_author'),
+    path('create/', views.create_author, name='create-author'),
+    path('edit/<int:author_id>', views.create_author, name='edit-author'),
+    path('delete/<int:author_id>/', views.delete_author, name='delete-author'),
 ]

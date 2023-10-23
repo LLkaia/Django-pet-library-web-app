@@ -127,9 +127,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# PyCharm
-.idea
-
-# that should not change!
-# used in self-checking

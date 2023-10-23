@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<ul class="profile">
-  {% for order in orders%}
-  <li class="order_item">Order #{{ order.id }} of book "{{ order.book.name }}" created at {{ order.created_at }}{% if order.end_at %}, ended at {{ order.end_at }}, {% endif %}, plated ended at {{ order.plated_end_at }}</li>
-  {% endfor %}
-</ul>
-{% endblock content %}

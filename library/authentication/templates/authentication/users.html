@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<ol class="user-list">
+<a href="{% url 'edit-user' %}" class="container-filter-button__button">Register new user</a>
+<ul class="user-list">
     {% for one_user in all_users%}
-    <li><a href="{% url 'concrete-user' one_user.id %}">{{ one_user.first_name }} {{ one_user.last_name }} :: {{ one_user.get_role_name}}</a></li>
+    <li>
+        <a href="{% url 'concrete-user' one_user.id %}" class="user">{{ one_user.first_name }} {{ one_user.last_name }} :: {{ one_user.get_role_name}}</a>
+        <a href="{% url 'delete-user' one_user.id %}" class="cross">
+            <div class="line horizontal"></div>
+            <div class="line vertical"></div>
+        </a>
+    </li>
     {% endfor %}
-</ol>
+</ul>
 {% endblock content %}

@@ -1,17 +1,40 @@
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import make_password
-from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from authentication.models import CustomUser
 from book.models import Book
-from library.forms import CustomRegistrationForm, BookFilterForm, CustomUserCreationForm
+from library.forms import CustomRegistrationForm, BookFilterForm, CustomUserEditingForm
 from django.contrib.auth import logout
+from rest_framework import viewsets
+from .serializers import CustomUserSerializer
+
+
+class CustomUserViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+    def perform_create(self, serializer):
+        password = self.request.data.get('password')
+        hashed_password = make_password(password)
+        serializer.validated_data['password'] = hashed_password
+        serializer.save()
+
+    def perform_update(self, serializer):
+        password = self.request.data.get('password')
+        if password:
+            hashed_password = make_password(password)
+            serializer.validated_data['password'] = hashed_password
+        serializer.save()
+
+
+def is_admin(user):
+    return user.role == 1
 
 
 def index(request):
     books = Book.objects.all()
-    form = None
     if request.method == 'POST':
         form = BookFilterForm(request.POST)
         if form.is_valid():
@@ -21,6 +44,8 @@ def index(request):
                 books = books.filter(authors=author)
             if name:
                 books = books.filter(name__icontains=name)
+    else:
+        form = None
     data = {
         'title': 'Main page',
         'user': request.user,
@@ -66,26 +91,63 @@ def login_view(request):
     return render(request, 'authentication/login.html', data)
 
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('home')
 
 
+@login_required
+@user_passes_test(is_admin)
+def edit_user(request, user_id=0):
+    if request.method == 'POST':
+        if user_id == 0:
+            form = CustomUserEditingForm(request.POST)
+        else:
+            user = CustomUser.get_by_id(user_id)
+            form = CustomUserEditingForm(request.POST, instance=user)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.password = form.cleaned_data['password']
+            instance.save()
+            return redirect('users')
+    else:
+        if user_id == 0:
+            form = CustomUserEditingForm(exclude_field=True)
+        else:
+            user = CustomUser.get_by_id(user_id)
+            form = CustomUserEditingForm(instance=user)
+    data = {
+        'title': 'Create/edit user',
+        'user': request.user,
+        'form': form,
+    }
+    return render(request, 'authentication/create.html', data)
+
+
+@login_required
+@user_passes_test(is_admin)
+def delete_user(request, user_id):
+    if request.user.id != user_id:
+        CustomUser.delete_by_id(user_id)
+    return redirect('users')
+
+
+@login_required
+@user_passes_test(is_admin)
 def users(request):
-    if request.user.role != 1:
-        return HttpResponseForbidden
-    users = CustomUser.get_all()
+    all_users = CustomUser.get_all()
     data = {
         'title': 'Users',
-        'all_users': users,
+        'all_users': all_users,
         'user': request.user,
     }
     return render(request, 'authentication/users.html', context=data)
 
 
+@login_required
+@user_passes_test(is_admin)
 def concrete_user(request, user_id):
-    if request.user.role != 1:
-        return HttpResponseForbidden
     user = CustomUser.get_by_id(user_id)
     data = {
         'title': f'{user.first_name} {user.last_name}',
@@ -95,39 +157,14 @@ def concrete_user(request, user_id):
     return render(request, 'authentication/user.html', context=data)
 
 
+@login_required
+@user_passes_test(is_admin)
 def user_orders(request, user_id):
-    if request.user.role != 1:
-        return HttpResponseForbidden
     user = CustomUser.get_by_id(user_id)
-    orders = user.books.all()
+    books = user.books.all()
     data = {
-        'title': f'{user.first_name} {user.last_name} --> orders',
-        'orders': orders,
+        'title': f'{user.first_name} {user.last_name} -- > Orders',
+        'orders': books,
         'user': request.user,
     }
-    return render(request, 'authentication/orders.html', context=data)
-
-def create_user(request, user_id=0):
-    if request.method == 'POST':
-        if user_id == 0:
-            form = CustomUserCreationForm(request.POST)
-        else:
-            user = CustomUser.get_by_id(user_id)
-            form = CustomUserCreationForm(request.POST, instance=user)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.password = make_password(form.cleaned_data['password'])
-            instance.save()
-            return redirect('users')
-    else:
-        if user_id == 0:
-            form = CustomUserCreationForm()
-        else:
-            user = CustomUser.get_by_id(user_id)
-            form = CustomUserCreationForm(instance=user)
-    data = {
-        'title': 'Create/edit user',
-        'user': request.user,
-        'form': form,
-    }
-    return render(request, 'authentication/create.html', data)
+    return render(request, 'order/orders.html', context=data)

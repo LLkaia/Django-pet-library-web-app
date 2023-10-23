@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form method="post" class="login-form-container">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Place Order</button>
-    </form>
+<form method="post" class="login-form-container">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Place Order</button>
+</form>
 {% endblock %}

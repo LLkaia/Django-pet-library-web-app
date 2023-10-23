@@ -33,7 +33,7 @@ body {
     display: inline-block;
     margin: 10px;
     padding: 15px;
-    color: black;
+    color: white;
     text-decoration: none;
     border: none;
     border-radius: 5px;
@@ -199,6 +199,14 @@ body {
     margin: 10px 0;
 }
 
+.book-list li h2 a {
+    background: none;
+}
+
+.book-list li h2 a:hover {
+    background: none;
+}
+
 .book-list li a {
     text-decoration: none;
     background-color: #55B4B0;
@@ -219,18 +227,22 @@ body {
 
 .user-list li {
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.user-list li a {
+.user-list li .user {
     text-decoration: none;
     background-color:  #7BA7BC;
     color: #fff;
     padding: 5px 10px;
     border-radius: 3px;
+    border: none;
     display: inline-block;
 }
 
-.user-list li a:hover {
+.user-list li .user:hover {
     background-color: #0056b3;
 }
 
@@ -275,15 +287,25 @@ body {
   background-color: #0056b3;
 }
 
-.order {
-    margin: 20px;
+.cross {
+    position: relative;
+    width: 15px;
+    height: 15px;
 }
 
-.order_item {
-    text-decoration: none;
-    background-color:  #7BA7BC;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 3px;
-    display: inline-block;
+.line {
+    position: absolute;
+    background-color: red;
+    width: 4px;
+    height: 100%;
+    left: 48%;
+    top: 0;
+}
+
+.line.horizontal {
+    transform: rotate(45deg);
+}
+
+.line.vertical {
+    transform: rotate(-45deg);
 }

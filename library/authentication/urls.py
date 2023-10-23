@@ -9,6 +9,7 @@ urlpatterns = [
     path('users/', views.users, name='users'),
     path('users/<int:user_id>/', views.concrete_user, name='concrete-user'),
     path('users/<int:user_id>/orders/', views.user_orders, name='user-orders'),
-    path('users/create/', views.create_user, name='create-user'),
-    path('users/create/<int:user_id>/', views.create_user, name='create-user'),
+    path('users/edit/', views.edit_user, name='edit-user'),
+    path('users/edit/<int:user_id>/', views.edit_user, name='edit-user'),
+    path('users/delete/<int:user_id>/', views.delete_user, name='delete-user'),
 ]

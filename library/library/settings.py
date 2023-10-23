@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'author',
     'book',
     'order',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
 ]
 
 AUTH_USER_MODEL = 'authentication.CustomUser'
@@ -96,10 +99,11 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -171,3 +175,12 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}

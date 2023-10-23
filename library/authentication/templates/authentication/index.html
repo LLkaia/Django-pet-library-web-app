@@ -13,7 +13,16 @@
     {% for book in books%}
     {% if book.count %}
     <li>
-        <h2>{{ book.name }}</h2>
+        <h2>
+            {{ book.name }}
+            {% if user.role == 1 %}
+            <a href="{% url 'delete-book' book.id %}" class="cross">
+                <div class="line horizontal"></div>
+                <div class="line vertical"></div>
+            </a>
+            {% endif %}
+        </h2>
+
         <p>{{ book.description|linebreaks|truncatewords:4 }}</p>
         <p><a href="{% url 'concrete-book' book.id %}">Details</a></p>
     </li>

@@ -1,30 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% if user.role == 0 %}
-        <a href="{% url 'create_order' %}" class="create">Create Order</a>
-        <ul class="user-list">
-            {% for order in orders %}
-                {% if order.user == user %}
-                    <li>
-                        <a href="{% url 'order_detail' order.id %}">Order №{{ order.id }}</a>
-                        {% if order.end_at %}<p>End At: {{ order.end_at|date:"M. d, Y, g:i a" }}</p>{% endif %}
-                    </li>
-                {% endif %}
-            {% empty %}
-                <li>No orders available.</li>
-            {% endfor %}
-        </ul>
-    {% elif user.role == 1 %}
-        <ul class="user-list">
-            {% for order in orders %}
-                <li>
-                    <a href="{% url 'order_detail' order.id %}">Order №{{ order.id }}</a>
-                    {% if order.end_at %}<p>End At: {{ order.end_at|date:"M. d, Y, g:i a" }}</p>{% endif %}
-                </li>
-            {% empty %}
-                <li>No orders available.</li>
-            {% endfor %}
-        </ul>
+{% if user.role == 0 %}<a href="{% url 'create-order' %}" class="container-filter-button__button">Create Order</a>{% endif %}
+<ul class="user-list">
+    {% for order in orders %}
+    {% if order.user == user or user.role == 1 %}
+    <li>
+        <a href="{% url 'order-detail' order.id %}" class="user">Order №{{ order.id }}</a>
+        {% if order.end_at %}This book has been returned.{% if user.role == 1 %}
+        <a href="{% url 'delete-order' order.id %}" class="cross">
+            <div class="line horizontal"></div>
+            <div class="line vertical"></div>
+        </a>{%endif%}
+        {% elif order.plated_end_at %}Planned to return: {{ order.plated_end_at|date:"M. d, Y" }}{% endif %}
+    </li>
     {% endif %}
+    {% empty %}
+    <li>No orders available.</li>
+    {% endfor %}
+</ul>
 {% endblock %}

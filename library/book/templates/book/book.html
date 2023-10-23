@@ -8,7 +8,9 @@
         <p>{{ book.description|linebreaks }}</p>
         <p>Available: {{ book.count }}</p>
         {% if book.authors %}<p>Authors: {% for author in book.authors.all %}{{ author.name }} {{ author.last_name }} {{ author.patronymic }} | {% endfor %}</p>{% endif%}
-        <a href="{% url 'create-book' book.id %}" class="container-filter-button__button">Edit</a>
+        {% if user.role == 1 %}<a href="{% url 'create-book' book.id %}" class="container-filter-button__button">Edit</a>
+        {% elif user.role == 0 %}<a href="{% url 'create-order-book' book.id %}" class="container-filter-button__button">Order this book</a>
+        {% endif %}
     </li>
 </ul>
 {% endblock content %}

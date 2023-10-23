@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form method="post" class="login-form-container">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create Author</button>
-    </form>
-    <a href="{% url 'authors' %}" class="create">Back to All Authors</a>
+<form method="post" class="login-form-container">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
 {% endblock %}

@@ -22,20 +22,16 @@
 <div class="container">
     <ul class="nav__list menu">
         <li class="nav__item"><a href="{% url 'home' %}" class="nav__link">Books</a></li>
-        {% if user.is_authenticated %}
-        {% if user.role == 0 %}
         <li class="nav__item"><a href="{% url 'orders' %}" class="nav__link">Orders</a></li>
-        {% else %}
-        <li class="nav__item"><a href="{% url 'orders' %}" class="nav__link">Orders</a></li>
+        {% if user.is_authenticated %}{% if user.role == 1 %}
         <li class="nav__item"><a href="{% url 'users' %}" class="nav__link">Users</a></li>
         <li class="nav__item"><a href="{% url 'authors' %}" class="nav__link">Authors</a></li>
-        {% endif %}
-        {% endif %}
+        {% endif %}{% endif %}
     </ul>
 </div>
 <h1 class="title">{{ title }}</h1>
 {% block content %}
 {% endblock %}
-
+</script>
 </body>
 </html>

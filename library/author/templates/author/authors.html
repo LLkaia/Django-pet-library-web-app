@@ -1,20 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="order">
-    <a href="{% url 'create_author' %}" class="create">Create Author</a>
-
-    <ul class="user-list">
-        {% for author in authors %}
-            <li>
-                {{ author.name }} {{ author.surname }} {{ author.patronymic }}
-                {% if not author.books.exists %}
-                    <a href="{% url 'delete_author' author.id %}" class="btn btn-danger">Delete</a>
-                {% endif %}
-            </li>
-        {% empty %}
-            <li>No authors available.</li>
-        {% endfor %}
-    </ul>
-    </div>
+<a href="{% url 'create-author' %}" class="container-filter-button__button">Create new author</a>
+<ul class="user-list">
+    {% for author in authors %}
+    <li>
+        <a class="user" href="{% url 'edit-author' author.id%}">{{ author.name }} {{ author.surname }} {{ author.patronymic }}</a>
+        {% if not author.books.exists %}
+        <a href="{% url 'delete-author' author.id %}" class="cross">
+            <div class="line horizontal"></div>
+            <div class="line vertical"></div>
+        </a>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}
