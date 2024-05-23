@@ -3,8 +3,8 @@ services:
     build: .
     container_name: my-django
     ports:
-      - "8000:8000"
-    command: python manage.py runserver 0.0.0.0:8000
+      - "8888:8888"
+    command: python manage.py runserver 0.0.0.0:8888
     volumes:
       - ./library:/usr/app/library/
     depends_on:

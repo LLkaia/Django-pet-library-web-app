@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render, redirect
@@ -59,7 +61,13 @@ def register(request):
     if request.method == 'POST':
         form = CustomRegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            send_mail(
+                'Welcome to our Library',
+                'Thank you for you registartion!',
+                settings.EMAIL_HOST_USER,
+                [user.email]
+            )
             return redirect('login')
     else:
         form = CustomRegistrationForm()

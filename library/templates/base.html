@@ -1,3 +1,5 @@
+{% load user_tags %}
+{% load user_filters %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -12,6 +14,8 @@
     <a href="{% url 'home' %}" class="logo">Library</a>
     <ul class="nav__list">
         {% if user.is_authenticated %}
+        {% user_email as email %}
+        <li class="nav__item"><a href="{% url 'home' %}" class="nav__link">{{ email | format_email}}</a></li>
         <li class="nav__item"><a href="{% url 'logout' %}" class="nav__link">Log out</a></li>
         {% else %}
         <li class="nav__item"><a href="{% url 'login' %}" class="nav__link">Log in</a></li>

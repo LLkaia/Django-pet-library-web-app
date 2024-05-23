@@ -1,5 +1,6 @@
 from django.urls import path, include, re_path
 from django.contrib import admin
+import debug_toolbar
 from rest_framework import routers
 from authentication.views import CustomUserViewSet
 from order.views import OrderViewSet
@@ -18,8 +19,14 @@ order_router = routers.SimpleRouter()
 order_router.register(r'order', OrderViewSet, basename='customuser-order-detail')
 
 
+def trigger_error(request):
+    raise RuntimeError('Something bad happened!')
+
 
 urlpatterns = [
+    path('__debug__/', include(debug_toolbar.urls)),
+    path('sentry-debug/', trigger_error),
+
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
     path('api/v1/user/<int:user_id>/', include(order_router.urls)),
